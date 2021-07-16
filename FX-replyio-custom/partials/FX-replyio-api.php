@@ -55,8 +55,7 @@ function FXIO_api_call($options) {
 
 //================================================================
 // BUILD API CALLER -> CREATE CONTACT/LEAD
-// - Only sends if form id is one of the selected in
-//   the settings page.
+// - Only sends if the API key has been set
 //================================================================
 function FXIO_send_new_contact($name, $email, $post_came_from, $form_name, $form_id, $campaign_id) {
 
