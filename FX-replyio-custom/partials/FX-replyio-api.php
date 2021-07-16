@@ -23,8 +23,6 @@ function FXIO_post_submit($contact_form, $abort, $submission) {
   // returns false if failed
   $response = FXIO_send_new_contact($name, $email, $post_came_from, $form_name, $form_id, $campaign_id);
 
-  // var_dump($response); // uncomment to show in feedback
-
   return $contact_form;
 }
 
@@ -33,6 +31,8 @@ function FXIO_post_submit($contact_form, $abort, $submission) {
 // BUILD API CALLER
 // - You must supply the options array
 // - Returns the response
+//
+// API DOCS: https://apidocs.reply.io/
 //================================================================
 function FXIO_api_call($options) {
   // start the curl to the api -> build the carrier
@@ -42,8 +42,9 @@ function FXIO_api_call($options) {
   // send the payload on the carrier and wait for a response
   $response = curl_exec($curl);
 
+  // check if carrier made it safely
   if($response === FALSE) {
-    echo curl_error($curl);
+    echo curl_error($curl); // this will show in the ajax response
   }
 
   // terminate the carrier
@@ -55,7 +56,8 @@ function FXIO_api_call($options) {
 
 //================================================================
 // BUILD API CALLER -> CREATE CONTACT/LEAD
-// - Only sends if the API key has been set
+// - Only sends if the API key has been set and
+//   the form has an associated campaign ID.
 //================================================================
 function FXIO_send_new_contact($name, $email, $post_came_from, $form_name, $form_id, $campaign_id) {
 
@@ -106,11 +108,6 @@ function FXIO_send_new_contact($name, $email, $post_came_from, $form_name, $form
 
   // send the payload on the carrier and wait for a response
   $response = FXIO_api_call( $options );
-
-  // uncomment to show in feedback
-  // echo "<pre>";
-  // var_dump($options);
-  // echo "</pre>";
 
   // all done :)
   return $response;
